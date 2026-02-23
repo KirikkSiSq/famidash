@@ -50,7 +50,7 @@ banked(startup_bank.func) void state_startup(){
 
     // decompress graphics
     se_vram_address(0);
-    se_memory_fill((void*)0x2007,0,256);
+    se_memory_fill((void*)0x2007,0,0x200);
     se_vram_donut_decompress(chr_menu_font_pusab, chr_bank_0);
     se_vram_donut_decompress(chr_menu_tfdlogo, chr_bank_0);
 

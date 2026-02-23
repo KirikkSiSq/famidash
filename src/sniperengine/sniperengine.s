@@ -1742,64 +1742,125 @@ PPU_DATA = $2007
 ;;
 .export se_memory_fill
 .proc se_memory_fill
+    PPU_PAGE = $20
     ;   A: value to fill with
     ;   X: length of memory region (lo)
     ;__rc2: ptr to memory to fill (lo)
     ;__rc3: ptr to memory to fill (hi)
     ;__rc4: length of memory region (hi)
 
-    
-    pha
-    ldy __rc2 ; save low byte of memory ptr
-    lda #0
-    sta __rc2 ; write 0 to low byte to save cycles later
+    stx __rc5
+    cpx #0
 
-    ; is the pointer in the $2xxx region? (likely ppu_data)
-    lda __rc3
-    and #$f0 ; mask off the lower four bits
-    cmp #$20
-    beq @no_inc_pointer
-    
-    pla
-
-    ; decrement x by one
+    bne @0
+    ldx __rc4
+    beq @5
+    @0:
+    ldx __rc3
+    cpx #PPU_PAGE
+    beq ppu_fill
+    tay ; -+
+    txa ;  +-- all of this for a phx
+    pha ;  |
+    tya ; -+
+    ldx __rc4
+    beq @2
+    ldy #0
+    @1:
+    sta (__rc2), y 
+    iny
+    bne @1
+    inc __rc3
     dex
-    cpx #$ff
-    bne @inc_loop
-    dec __rc4
-
-    @inc_loop:
-        sta (__rc2),y 
-        iny
-        bne :+ ; inc pointer
-        inc __rc3
-        : 
-        dex
-        bne @inc_loop
-    
-    @il_is_remaining_length_zero:
-        cpx __rc4 ; x should be zero here
-        beq @done
-        dec __rc4
-        jmp @inc_loop
-
-
-    @no_inc_pointer:
+    bne @1
+    @2: 
+    ldy __rc5
+    beq @4
+    @3:
+    dey
+    sta (__rc2), y 
+    cpy #0
+    bne @3
+    @4:
     pla
-
-    @no_inc_loop:
-        sta $2007 ; using indexed instructions breaks it :sob: 
-        dex
-        bne @no_inc_loop
-
-    @nil_is_remaining_length_zero:
-        cpx __rc4
-        beq @done
-        dec __rc4
-        jmp @no_inc_loop
-
-    @done:
+    tax
+    stx __rc3
+    @5:
     rts
+
+    ppu_fill:
+    ldx __rc4
+    beq @2
+    ldy #0
+    @1:
+    sta $2007
+    iny
+    bne @1
+    dex
+    bne @1
+    @2:
+    ldy __rc5
+    beq @4
+    @3:
+    dey
+    sta $2007
+    cpy #0
+    bne @3
+    @4:
+    rts
+
+    
+    ;pha
+    ;ldy __rc2 ; save low byte of memory ptr
+    ;lda #0
+    ;sta __rc2 ; write 0 to low byte to save cycles later
+
+    ;; is the pointer in the $2xxx region? (likely ppu_data)
+    ;lda __rc3
+    ;and #$f0 ; mask off the lower four bits
+    ;cmp #$20
+    ;beq @no_inc_pointer
+    
+    ;pla
+
+    ;; decrement x by one
+    ;dex
+    ;cpx #$ff
+    ;bne @inc_loop
+    ;dec __rc4
+
+    ;@inc_loop:
+    ;    sta (__rc2),y 
+    ;    iny
+    ;    bne :+ ; inc pointer
+    ;    inc __rc3
+    ;    : 
+    ;    dex
+    ;    bne @inc_loop
+    
+    ;@il_is_remaining_length_zero:
+    ;    cpx __rc4 ; x should be zero here
+    ;    beq @done
+    ;    dec __rc4
+    ;    jmp @inc_loop
+
+
+    ;@no_inc_pointer:
+    ;pla
+
+    ;@no_inc_loop:
+    ;    sta $2007 ; using indexed instructions breaks it :sob: 
+    ;    dex
+    ;    bne @no_inc_loop
+
+    ;@nil_is_remaining_length_zero:
+    ;    cpx __rc4
+    ;    beq @done
+    ;    dec __rc4
+    ;    jmp @no_inc_loop
+
+    ;@done:
+    ;rts
         
 
 .endproc

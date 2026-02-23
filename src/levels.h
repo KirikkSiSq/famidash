@@ -10,6 +10,11 @@ struct Level {
         //u8 line;
     } color;
 
+    u8 height;
+
     u8* tile_data; u8 tile_bank;
     u8* sprite_data; u8 sprite_bank;
 };
+
+
+#define grid16(x,y) ((x&15)|(y<<4))

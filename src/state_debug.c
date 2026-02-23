@@ -212,7 +212,7 @@ banked(debug_bank.data) const u8 pal_gsjmp[] = {
 banked(debug_bank.func) void state_gamestatejumper(){
 
     se_vram_address(0);
-    se_memory_fill((void*)0x2007, 0, 0x100);
+    se_memory_fill((void*)0x2007, 0, 0x200);
     se_vram_donut_decompress(chr_menu_font_pusab, chr_bank_0);
 
     se_vram_address(0x2000);
@@ -225,7 +225,7 @@ banked(debug_bank.func) void state_gamestatejumper(){
     se_memory_copy((void*)0x2007,(void*)str_gsjmp, sizeof(str_gsjmp)-1);
 
     se_turn_on_rendering();
-    while(1){
+    while(!joypad1.press_start){
         se_wait_vsync();
 
         gamestate += joypad1.press_right;
@@ -242,11 +242,7 @@ banked(debug_bank.func) void state_gamestatejumper(){
             nametable_address_A(15,14)
         );
 
-        
-
-
-        if(joypad1.press_start){
-            break;
-        }
     }
+
+    return;
 }

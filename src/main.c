@@ -49,7 +49,7 @@ int main(void) {
     se_clear_palette();
 
     while(1){
-        __asm__("sei");
+        __attribute__((leaf)) __asm__ volatile ("sei");
         se_set_palette_brightness_all(0);
         se_wait_vsync(); // this is needed to flush the vram buffer
         se_turn_off_rendering();

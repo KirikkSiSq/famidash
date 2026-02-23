@@ -8,7 +8,8 @@ void state_game() {
     se_vram_address(0);
     se_vram_donut_decompress(chr_tiles_global,chr_bank_1);
 
-
+    set_prg_a000(level_bank_0);
+    init_level_rle(lvl_test_header);
 
 
     se_turn_on_rendering();

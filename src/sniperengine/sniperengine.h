@@ -139,7 +139,7 @@ __attribute__((leaf)) void banked_call_a000(u8 bank, void(*method)(void));
 __attribute__((leaf)) void set_prg_c000(u8 bank);
 __attribute__((leaf)) void set_prg_a000(u8 bank);
 __attribute__((leaf)) void set_chr_bank(u8 window, u8 bank);
-#define jsrfar_noargs(bank, func) __asm__ volatile("jsr jsrfar \n .word "STR(func)"\n .byte "STR(bank)" \n")
+#define jsrfar_noargs(bank, func) __asm__ volatile("jsr jsrfar \n .word "STR(func)"\n .byte "STR(bank)" \n" :::"a","x","y","p")
 
 #define se_vram_address(address) __asm__ volatile("ldx #>"STR(address)"\n stx $2006 \n ldx #<"STR(address)"\n stx $2006")
 __attribute__((leaf)) void se_vram_unrle(const void* data, u8 usezero);
