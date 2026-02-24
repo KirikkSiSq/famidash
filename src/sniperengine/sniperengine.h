@@ -30,8 +30,13 @@
 
 typedef unsigned char u8;
 typedef unsigned short u16;
-#define u24 __BitInt(24)
+#define u24 unsigned __BitInt(24)
 typedef unsigned long u32;
+
+typedef signed char s8;
+typedef signed short s16;
+#define s24 signed __BitInt(24)
+typedef signed long s32;
 
 #define XSTR(x) #x
 #define STR(x) XSTR(x)
@@ -172,6 +177,15 @@ __attribute__((leaf)) void se_one_vram_buffer(
 __attribute__((leaf)) void se_one_vram_buffer_repeat_horizontal(
 	const char data, const u8 len, const u16 ppu_addr
 );
+__attribute__((leaf)) void se_one_vram_buffer_repeat_vertical(
+	const char data, const u8 len, const u16 ppu_addr
+);
+
+
+__attribute__((leaf)) void se_multi_vram_buffer_horizontal(
+	const char* data, const u8 len, const u16 ppu_addr
+);
+
 __attribute__((leaf)) void se_string_vram_buffer(
 	const char *data, const u16 ppu_addr
 );
@@ -198,6 +212,7 @@ __attribute__((leaf)) void se_memory_copy(void* to, void* from, u16 length);
     "lda #"STR(rate)" \n" \
     "ldx #"STR(bank)" \n" \
     "jsr se_play_sample \n" \
+    :::"a","x" \
 )
 
 

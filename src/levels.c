@@ -2,7 +2,11 @@
 
 
 banked(level_bank_0) const u8 lvl_test_tiles[] = {
-    0,27,1,27,
+    0,27, 1,27, 2,27, 3,27,
+    4,27, 5,27, 6,27, 7,27, 
+    8,27, 9,27, 10,27, 11,27,
+    12,27, 13,27, 14,27, 15,27,
+    64,27, 
 };
 banked(level_bank_0) const u8 lvl_test_sprites[] = {
     0,

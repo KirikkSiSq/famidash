@@ -177,6 +177,47 @@ jmp se_music_update
 jmp famistudio_music_stop
 jmp famistudio_music_pause
 
+;;
+;;  INIT
+;;  SETS UP THE ENGINE FOR YOU
+;;
+.export se_init
+.proc se_init
+    and #%00000001 ; just the zeroth bit.
+    ror 
+    ror ; now its the seventh! 
+    ora __bank_select_hi
+    sta __bank_select_hi
+
+    ; set post-nmi pointer
+    lda #<nofunction
+    ldx #>nofunction
+    sta se_post_nmi_ptr + 0
+    stx se_post_nmi_ptr + 1
+    sta se_irq_ptr + 0
+    stx se_irq_ptr + 1
+    sta se_irq_table + 1
+    stx se_irq_table + 2
+    dec se_irq_table + 0
+
+    ; disable apu frame counter irq
+    lda #$c0
+    sta $4017
+    ; disable mapper irq
+    sta $e000
+
+    jsr se_clear_palette
+    jsr se_clear_sprites
+
+    ; set up vram buffer
+    jsr se_set_vram_buffer
+
+    ; enable sram
+    lda #%10000000
+    sta $a001
+
+    rts
+.endproc
 
 ;;  
 ;;  IDENTITY TABLE
@@ -230,69 +271,6 @@ se_palette_brightness_table:
     .byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 
 
-;;
-;;  INIT
-;;  SETS UP THE ENGINE FOR YOU
-;;
-.export se_init
-.proc se_init
-    and #%00000001 ; just the zeroth bit.
-    ror 
-    ror ; now its the seventh! 
-    ora __bank_select_hi
-    sta __bank_select_hi
-
-    ; set post-nmi pointer
-    lda #<nofunction
-    ldx #>nofunction
-    sta se_post_nmi_ptr + 0
-    stx se_post_nmi_ptr + 1
-    sta se_irq_ptr + 0
-    stx se_irq_ptr + 1
-    sta se_irq_table + 1
-    stx se_irq_table + 2
-    dec se_irq_table + 0
-
-    ; disable apu frame counter irq
-    lda #$c0
-    sta $4017
-    ; disable mapper irq
-    sta $e000
-
-    jsr se_clear_palette
-    jsr se_clear_sprites
-
-    ; set up default banks
-    ;lda #0
-    ;tax
-    ;jsr set_chr_bank
-    ;lda #1
-    ;inx
-    ;inx
-    ;jsr set_chr_bank
-    ;lda #2
-    ;inx
-    ;inx
-    ;jsr set_chr_bank
-    ;lda #3
-    ;inx
-    ;jsr set_chr_bank
-    ;lda #4
-    ;inx
-    ;jsr set_chr_bank
-    ;lda #5
-    ;inx
-    ;jsr set_chr_bank
-
-    ; set up vram buffer
-    jsr se_set_vram_buffer
-
-    ; enable sram
-    lda #%10000000
-    sta $a001
-
-    rts
-.endproc
 
 .export nofunction
 .proc nofunction
@@ -308,7 +286,7 @@ MouseBoundsMin:
     .byte 1,1
 MouseBoundsMax:
     .byte 254,239
-;.align 64  ; as long as access loops aren't on a page
+.align 32  ; as long as access loops aren't on a page
             ; boundary this *should* run fine
 .export se_safe_controller_polling
 .proc se_safe_controller_polling
@@ -537,7 +515,7 @@ MouseBoundsMax:
 .proc enable_nmi
     lda se_ppu_ctrl_var
     ora #%10000000
-    jmp toggle_nmi_common
+    bmi toggle_nmi_common
 .endproc
 
 
@@ -552,7 +530,7 @@ MouseBoundsMax:
 	tax
 	lda #%00000110
 	ora __bank_select_hi
-	jmp __set_reg_retry
+	bne __set_reg_retry
 .endproc
 
 .export set_prg_a000
@@ -589,8 +567,8 @@ MouseBoundsMax:
 	sta __rc19
 	jsr __call_indir
 	pla
-	jsr set_prg_a000
-	rts
+	jmp set_prg_a000
+	;rts
 .endproc
 
 .export set_chr_bank
@@ -1163,8 +1141,8 @@ PPU_DATA = $2007
     ;sta $2000
 
     pla
-    jsr set_prg_a000
-    rts
+    jmp set_prg_a000
+    ;rts
 .endproc
 
 
@@ -1512,8 +1490,8 @@ PPU_DATA = $2007
     sta se_name_upd_adr+0
     stx se_name_upd_adr+1
     inc se_name_upd_enable
-    jsr __post_vram_update
-    rts
+    jmp __post_vram_update
+    ;rts
 .endproc
 
 .export se_one_vram_buffer
@@ -1537,6 +1515,16 @@ PPU_DATA = $2007
     rts
 .endproc
 
+.export se_one_vram_buffer_repeat_vertical
+.proc se_one_vram_buffer_repeat_vertical
+    ldy se_vram_index
+    pha
+    lda __rc3
+    and #%00111111
+    ora #%10000000
+    bne __se_one_vram_buffer_repeat ; bra
+.endproc
+
 .export se_one_vram_buffer_repeat_horizontal
 .proc se_one_vram_buffer_repeat_horizontal
     ldy se_vram_index
@@ -1544,6 +1532,10 @@ PPU_DATA = $2007
     lda __rc3
     and #%00111111
     ora #%01000000
+    ; fall through
+.endproc
+
+.proc __se_one_vram_buffer_repeat
     sta se_vram_buffer, y 
     iny
     lda __rc2
@@ -1559,6 +1551,51 @@ PPU_DATA = $2007
     lda #$ff
     sta se_vram_buffer, y 
     sty se_vram_index
+
+    rts
+.endproc
+
+
+.export se_multi_vram_buffer_horizontal
+.proc se_multi_vram_buffer_horizontal
+    ;     A - len
+	;     X - <ppu_address
+	; __rc2 - <data
+	; __rc3 - >data
+	; __rc4 - >ppu_address
+
+    ldy se_vram_index
+    pha
+    lda __rc4
+    and #%00111111
+    ora #%01000000
+    ; fall through
+.endproc
+
+.proc se_multi_vram_buffer
+    sta se_vram_buffer+0, y ;<ppu_address
+    txa
+    sta se_vram_buffer+1, y ;>ppu_address
+    pla
+    sta se_vram_buffer+2, y ;len
+    sta __rc4 ; save length for comparison
+    iny
+    iny
+    iny
+
+    ldx se_identity_table, y ; tyx
+
+    ldy #0
+    @loop:
+        lda (__rc2), y 
+        sta se_vram_buffer, x
+        inx
+        iny
+        cpy __rc4
+        bne @loop
+    lda #$ff
+    sta se_vram_buffer, x
+    stx se_vram_index
 
     rts
 .endproc
@@ -1653,8 +1690,7 @@ PPU_DATA = $2007
         sta $2006
         pla
         sta $2007
-        clc
-        bcc __get_next_instruction
+        jmp __get_next_instruction
 
     @update_horizontal_sequence:
         lda se_ppu_ctrl_var
@@ -1716,11 +1752,7 @@ PPU_DATA = $2007
     ldx se_vram_tmp_stack_pointer
     txs
     jmp __post_vram_update
-
-    return_to_flush_vram_update:
         
-
-
     ;.align 256
     the_funny_pla_sta_2007_table_lmao:
         .repeat 32,i

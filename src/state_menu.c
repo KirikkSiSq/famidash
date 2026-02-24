@@ -234,6 +234,8 @@ void state_menu() {
 
     se_string_vram_buffer("2.0", nametable_address_A(20,9));
 
+    se_multi_vram_buffer_horizontal("bruh lmao",9,nametable_address_A(0,2));
+
     #ifdef FLAG_ISDEMO
         se_string_vram_buffer(str_demo, nametable_address_A(1,3));
         se_one_vram_buffer(FLAG_ISDEMO, nametable_address_A(6,3));

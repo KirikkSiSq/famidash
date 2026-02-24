@@ -8,6 +8,7 @@
 // const data
 #include "assets.c"
 #include "levels.c"
+#include "metatiles.c"
 
 // non-const data
 #include "ram.h"
