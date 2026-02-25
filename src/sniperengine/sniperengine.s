@@ -122,7 +122,7 @@ jmp enable_nmi
 ;; mmc3 functions
 jmp set_prg_a000
 jmp set_prg_c000
-jmp banked_call_a000
+;jmp banked_call_a000
 jmp set_chr_bank
 jmp jsrfar
 
@@ -273,10 +273,7 @@ se_palette_brightness_table:
 
 
 .export nofunction
-.proc nofunction
-    rts
-.endproc
-
+nofunction = se_identity_table+60
 
 ;;
 ;;  OAM DMA SHENANIGANS
@@ -553,23 +550,23 @@ MouseBoundsMax:
 	rts
 .endproc
 
-.export banked_call_a000
-.proc banked_call_a000
-    .import __call_indir
-	tay
-	lda __prg_a000
-	pha
-	tya
-	jsr set_prg_a000
-	lda __rc2
-	sta __rc18
-	lda __rc3
-	sta __rc19
-	jsr __call_indir
-	pla
-	jmp set_prg_a000
-	;rts
-.endproc
+;.export banked_call_a000
+;.proc banked_call_a000
+;    .import __call_indir
+;	tay
+;	lda __prg_a000
+;	pha
+;	tya
+;	jsr set_prg_a000
+;	lda __rc2
+;	sta __rc18
+;	lda __rc3
+;	sta __rc19
+;	jsr __call_indir
+;	pla
+;	jmp set_prg_a000
+;	;rts
+;.endproc
 
 .export set_chr_bank
 .proc set_chr_bank
@@ -581,10 +578,10 @@ MouseBoundsMax:
 	rts
 .endproc
 
-.proc set_chr_bank_retry
-	ora __bank_select_hi
-	jmp __set_reg_retry
-.endproc
+;.proc set_chr_bank_retry
+;	ora __bank_select_hi
+;	jmp __set_reg_retry
+;.endproc
 
 .export jsrfar
 .proc jsrfar
@@ -710,7 +707,7 @@ donut_stream_ptr = $02
 ; donut_block_count = $00
 
 .proc donut_block
-PPU_DATA = $2007
+    PPU_DATA = $2007
   ; lda $02
   ; sta donut_stream_ptr
   ; lda $03
@@ -1010,13 +1007,33 @@ PPU_DATA = $2007
 ;;
 
 
-;; see the header
-;.export se_vram_address
-;.proc se_vram_address
-;    stx $2006
-;    sta $2006
-;    rts
-;.endproc
+.export se_set_scroll
+.proc se_set_scroll
+    ;   AX: scroll x
+    ;rc2/3: scroll y
+    sta se_scroll_x+0
+    stx se_scroll_x+1
+    txa
+    and #1
+
+    asl __rc3
+    ora __rc3
+    and #%00000011
+    sta __rc3
+
+    lda se_ppu_ctrl_var
+    and #%11111100
+    ora __rc3
+    sta se_ppu_ctrl_var
+    
+    lda __rc2
+    sta se_scroll_y+0
+    lda __rc3
+    lsr
+    sta se_scroll_y+1
+
+    rts
+.endproc
 
 .export se_vram_unrle
 .proc se_vram_unrle
@@ -1221,8 +1238,7 @@ PPU_DATA = $2007
         iny
         dec __rc4
         bne @loop
-    inc se_palette_update
-    rts
+    beq __inc_palette_update ; bra
 .endproc
 
 .export se_set_palette_color
@@ -1232,8 +1248,7 @@ PPU_DATA = $2007
     tax
     lda __rc2
     sta se_palette_buffer, x
-    inc se_palette_update
-    rts
+    bpl __inc_palette_update ; bra
 .endproc
 
 .export se_set_palette_brightness_background
@@ -1251,8 +1266,7 @@ PPU_DATA = $2007
     adc     #0
     stx     se_palette_pointer_bg+0
     sta     se_palette_pointer_bg+1
-    inc     se_palette_update
-    rts
+    jmp __inc_palette_update ; bra
 .endproc
 
 .export se_set_palette_brightness_sprites
@@ -1270,9 +1284,14 @@ PPU_DATA = $2007
     adc     #0
     stx     se_palette_pointer_spr+0
     sta     se_palette_pointer_spr+1
-    inc     se_palette_update
+    ;fall through
+.endproc
+
+.proc __inc_palette_update
+    inc se_palette_update
     rts
 .endproc
+
 
 .export se_set_palette_brightness_all
 .proc se_set_palette_brightness_all
@@ -1517,17 +1536,15 @@ PPU_DATA = $2007
 
 .export se_one_vram_buffer_repeat_vertical
 .proc se_one_vram_buffer_repeat_vertical
-    ldy se_vram_index
     pha
     lda __rc3
     and #%00111111
     ora #%10000000
-    bne __se_one_vram_buffer_repeat ; bra
+    jmp __se_one_vram_buffer_repeat ; bra
 .endproc
 
 .export se_one_vram_buffer_repeat_horizontal
 .proc se_one_vram_buffer_repeat_horizontal
-    ldy se_vram_index
     pha
     lda __rc3
     and #%00111111
@@ -1536,6 +1553,7 @@ PPU_DATA = $2007
 .endproc
 
 .proc __se_one_vram_buffer_repeat
+    ldy se_vram_index
     sta se_vram_buffer, y 
     iny
     lda __rc2
@@ -1548,13 +1566,28 @@ PPU_DATA = $2007
     pla
     sta se_vram_buffer, y 
     iny
-    lda #$ff
-    sta se_vram_buffer, y 
-    sty se_vram_index
 
-    rts
+    ldx se_identity_table,y ;tyx
+    jmp __exit_vram_buffer_routine
 .endproc
 
+
+.export se_multi_vram_buffer_vertical
+.proc se_multi_vram_buffer_vertical
+    ;     A - len
+	;     X - <ppu_address
+	; __rc2 - <data
+	; __rc3 - >data
+	; __rc4 - >ppu_address
+    cmp #0
+    beq __exit_vram_buffer_noupdate
+
+    pha
+    lda __rc4
+    and #%00111111
+    ora #%10000000
+    jmp __se_multi_vram_buffer
+.endproc
 
 .export se_multi_vram_buffer_horizontal
 .proc se_multi_vram_buffer_horizontal
@@ -1563,8 +1596,9 @@ PPU_DATA = $2007
 	; __rc2 - <data
 	; __rc3 - >data
 	; __rc4 - >ppu_address
+    cmp #0
+    beq __exit_vram_buffer_noupdate
 
-    ldy se_vram_index
     pha
     lda __rc4
     and #%00111111
@@ -1572,7 +1606,10 @@ PPU_DATA = $2007
     ; fall through
 .endproc
 
-.proc se_multi_vram_buffer
+.proc __se_multi_vram_buffer
+
+
+    ldy se_vram_index
     sta se_vram_buffer+0, y ;<ppu_address
     txa
     sta se_vram_buffer+1, y ;>ppu_address
@@ -1593,12 +1630,18 @@ PPU_DATA = $2007
         iny
         cpy __rc4
         bne @loop
+    ; fall through
+.endproc
+
+__exit_vram_buffer_routine:
     lda #$ff
     sta se_vram_buffer, x
     stx se_vram_index
 
+__exit_vram_buffer_noupdate:
     rts
-.endproc
+;
+
 
 .export se_string_vram_buffer
 .proc se_string_vram_buffer
@@ -1646,6 +1689,8 @@ PPU_DATA = $2007
     rts
 .endproc
 
+
+
 ; system from neslib, modified to be  T H E  S P E E D
 .proc flush_vram_update2
     tsx
@@ -1667,7 +1712,8 @@ PPU_DATA = $2007
         bit __rc18 ; V if horizontal, N if vertical
 
         bvs @update_horizontal_sequence
-        bvc @update_single_tile
+        bmi @update_vertical_sequence
+        ;bvc @update_single_tile
         ;cmp #$40
         ;bcc @update_single_tile
 
@@ -1678,12 +1724,6 @@ PPU_DATA = $2007
         ;bmi @update_horizontal_sequence
         ;cpx #$ff
         ;beq @exit
-
-    @update_vertical_sequence:
-        lda se_ppu_ctrl_var
-        ora #$04
-        bne @update_common_sequence
-
     @update_single_tile:
         sta $2006
         pla
@@ -1691,6 +1731,11 @@ PPU_DATA = $2007
         pla
         sta $2007
         jmp __get_next_instruction
+
+    @update_vertical_sequence:
+        lda se_ppu_ctrl_var
+        ora #$04
+        bne @update_common_sequence
 
     @update_horizontal_sequence:
         lda se_ppu_ctrl_var
@@ -1737,6 +1782,7 @@ PPU_DATA = $2007
     @update_repeated_byte:
         and #$7f
         tax
+        beq @do_not_update
         pla
     @update_repeated_byte_loop:
         sta $2007
@@ -1745,13 +1791,16 @@ PPU_DATA = $2007
 
         lda se_ppu_ctrl_var
         sta $2000
-
-        bne __get_next_instruction
+        jmp __get_next_instruction
 
     @exit:
     ldx se_vram_tmp_stack_pointer
     txs
     jmp __post_vram_update
+
+    @do_not_update:
+        pla
+        jmp pla_sta_2007_table_end
         
     ;.align 256
     the_funny_pla_sta_2007_table_lmao:

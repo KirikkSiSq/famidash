@@ -5,8 +5,8 @@
 
 // load these into slot 16
 banked(level_bank_0) const struct Metatile mt_default_blocks[] = {
+    {0, 0, 0, 0},
     {4, 6, 5, 7},
-    {},
     {},
     {},
 

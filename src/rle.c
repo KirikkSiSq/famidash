@@ -46,6 +46,8 @@ static void __level_rle_fetch_next_tile(){
 
 void level_rle_fetch_columns(s8 count, u8 y_offset){
     set_prg_a000(active_lvl.tile_bank);
+    y_offset %= 30; // nes nametables are 30 tiles tall
+
     if(count >= 0){
         for(; count>0; count--){ // fetch this many columns
 
@@ -54,10 +56,14 @@ void level_rle_fetch_columns(s8 count, u8 y_offset){
                 __level_rle_fetch_next_tile();
                 collision_map_0[grid16(lvl_rle_x_offset,height)] = lvl_rle_value;
             }
+
+            for(u8 tile=0; tile<16; tile++){
+                u8 id = collision_map_0[grid16(lvl_rle_x_offset,y_offset)];
+                
+            }
+
             ++lvl_rle_x_offset;
             lvl_rle_x_offset &= 0x0f;
-
-            
         }
     } //else {
         // go backward code

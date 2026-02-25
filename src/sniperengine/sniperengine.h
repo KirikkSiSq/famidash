@@ -140,12 +140,14 @@ __attribute__((leaf)) void nofunction();
 __attribute__((leaf)) void disable_nmi();
 __attribute__((leaf)) void enable_nmi();
 
-__attribute__((leaf)) void banked_call_a000(u8 bank, void(*method)(void));
+//__attribute__((leaf)) void banked_call_a000(u8 bank, void(*method)(void));
 __attribute__((leaf)) void set_prg_c000(u8 bank);
 __attribute__((leaf)) void set_prg_a000(u8 bank);
 __attribute__((leaf)) void set_chr_bank(u8 window, u8 bank);
 #define jsrfar_noargs(bank, func) __asm__ volatile("jsr jsrfar \n .word "STR(func)"\n .byte "STR(bank)" \n" :::"a","x","y","p")
 
+
+__attribute__((leaf)) void se_set_scroll(u16 x, u16 y);
 #define se_vram_address(address) __asm__ volatile("ldx #>"STR(address)"\n stx $2006 \n ldx #<"STR(address)"\n stx $2006")
 __attribute__((leaf)) void se_vram_unrle(const void* data, u8 usezero);
 __attribute__((leaf)) void se_vram_donut_decompress(const u8 * data, u8 bank);
@@ -183,6 +185,9 @@ __attribute__((leaf)) void se_one_vram_buffer_repeat_vertical(
 
 
 __attribute__((leaf)) void se_multi_vram_buffer_horizontal(
+	const char* data, const u8 len, const u16 ppu_addr
+);
+__attribute__((leaf)) void se_multi_vram_buffer_vertical(
 	const char* data, const u8 len, const u16 ppu_addr
 );
 

@@ -28,7 +28,7 @@ sram u8 sram_buffer[2048], background_set, ground_set;
 #define collision_map_2 ((u8*)(sram_buffer+1792-32))
 
 // 32 tiles to buffer the next column of tiles
-#define collision_map_2 ((u8*)(sram_buffer+2016))
+#define tile_buffer ((u8*)(sram_buffer+2016))
 
 
 
