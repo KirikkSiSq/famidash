@@ -419,6 +419,11 @@
 			originalArtistText: "KEVIN MACLEOD",
 		},
 		{
+			fmsSongName: "Desert City",
+			lowerText: "DESERT CITY",
+			originalArtistText: "idfk lmao",
+		},
+		{
 			fmsSongName: "Menu Theme",
 			lowerText: "MENU THEME",
 			originalArtistText: "RobTop",

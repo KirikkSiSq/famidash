@@ -5,13 +5,15 @@
 
 
 
+
+
+// non-const data
+#include "ram.h"
+
 // const data
 #include "assets.c"
 #include "levels.c"
 #include "metatiles.c"
-
-// non-const data
-#include "ram.h"
 
 // extra code
 #include "funny_custom_routines.h"
@@ -72,7 +74,7 @@ int main(void) {
             set_chr_bank(4,6);
             set_chr_bank(5,7);
         }
-        se_scroll_x = se_scroll_y = 0;
+        se_set_scroll(0,0);
 
         switch (gamestate){
 

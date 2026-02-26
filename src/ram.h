@@ -16,10 +16,10 @@ __attribute__((retain)) u8  loaded_bg_set = 0xff, loaded_g_set = 0xff,
 sram u8 sram_buffer[2048], background_set, ground_set;
 
 // ok so here's where the metatiles are
-#define metatiles_TL (*(u8*)&sram_buffer[0])    // top left
-#define metatiles_TR (*(u8*)&sram_buffer[256])  // top right
-#define metatiles_BL (*(u8*)&sram_buffer[512])  // bottom left
-#define metatiles_BR (*(u8*)&sram_buffer[768])  // bottom right
+#define metatiles_TL ((u8*)sram_buffer)    // top left
+#define metatiles_TR ((u8*)sram_buffer+256)  // top right
+#define metatiles_BL ((u8*)sram_buffer+512)  // bottom left
+#define metatiles_BR ((u8*)sram_buffer+768)  // bottom right
 
 #define metatiles_collision (*(u8*)&sram_buffer[1024])  // collision
 

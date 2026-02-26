@@ -5,7 +5,28 @@ INCLUDE c-in-ram.ld
 default linker script does it for me */
 
 __prg_rom_0 = 0xa000;
+__prg_rom_1 = 0xa000;
+__prg_rom_2 = 0xa000;
+__prg_rom_3 = 0xa000;
+__prg_rom_4 = 0xa000;
+__prg_rom_5 = 0xa000;
+__prg_rom_6 = 0xa000;
+__prg_rom_7 = 0xa000;
+__prg_rom_8 = 0xa000;
+__prg_rom_9 = 0xa000;
+__prg_rom_10 = 0xa000;
+__prg_rom_11 = 0xa000;
+__prg_rom_12 = 0xa000;
+__prg_rom_13 = 0xa000;
+__prg_rom_14 = 0xa000;
+__prg_rom_15 = 0xa000;
 
+__prg_rom_16 = 0xa000;
+__prg_rom_17 = 0xa000;
+__prg_rom_18 = 0xa000;
+__prg_rom_19 = 0xa000;
+__prg_rom_20 = 0xa000;
+__prg_rom_21 = 0xa000;
 __prg_rom_22 = 0xa000;
 __prg_rom_23 = 0xa000;
 __prg_rom_24 = 0xa000;
