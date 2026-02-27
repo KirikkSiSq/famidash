@@ -408,6 +408,13 @@
 		},
 		*/
 		{
+			fmsSongName: "Hungryman Adventures",
+			upperText: "ELECTROMAN",
+			lowerText: "MY VERSION",
+			originalArtist: ["Waterflame", "Stingy", "RobvaTopper"],
+			coveringArtist: "SeaGlowingPro",
+		},
+		{
 			fmsSongName: "endgame",
 			lowerText: "ENDGAME",
 			originalArtist: "Waterflame",

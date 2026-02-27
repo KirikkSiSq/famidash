@@ -41,6 +41,7 @@ _level_list_lo:
 	.byte .lobyte(level_data_dorabaebasic6)
 	.byte .lobyte(level_data_dreamer)
 	.byte .lobyte(level_data_lookatthislevel)
+	.byte .lobyte(level_data_hungrymanadventures)
 	.byte .lobyte(level_data_groundtospace)
 	.byte .lobyte(level_data_ajollyretrochristmas)
 	.byte .lobyte(level_data_ultiatedestruction)
@@ -170,6 +171,7 @@ _level_list_hi:
 	.byte .hibyte(level_data_dorabaebasic6)
 	.byte .hibyte(level_data_dreamer)
 	.byte .hibyte(level_data_lookatthislevel)
+	.byte .hibyte(level_data_hungrymanadventures)
 	.byte .hibyte(level_data_groundtospace)
 	.byte .hibyte(level_data_ajollyretrochristmas)
 	.byte .hibyte(level_data_ultiatedestruction)
@@ -299,6 +301,7 @@ _level_list_bank:
 	.byte .lobyte(.bank(level_data_dorabaebasic6))
 	.byte .lobyte(.bank(level_data_dreamer))
 	.byte .lobyte(.bank(level_data_lookatthislevel))
+	.byte .lobyte(.bank(level_data_hungrymanadventures))
 	.byte .lobyte(.bank(level_data_groundtospace))
 	.byte .lobyte(.bank(level_data_ajollyretrochristmas))
 	.byte .lobyte(.bank(level_data_ultiatedestruction))
@@ -515,6 +518,7 @@ _level_lengths_lo:
 	.byte .lobyte($000090)		; dorabaebasic6
 	.byte .lobyte($0000AC)		; dreamer
 	.byte .lobyte($00005C)		; lookatthislevel
+	.byte .lobyte($000065)		; hungrymanadventures
 	.byte .lobyte($0000A2)		; groundtospace
 	.byte .lobyte($0000F3)		; ajollyretrochristmas
 	.byte .lobyte($00006C)		; ultiatedestruction
@@ -646,6 +650,7 @@ _level_lengths_md:
 	.byte .hibyte($000090)		; dorabaebasic6
 	.byte .hibyte($0000AC)		; dreamer
 	.byte .hibyte($00005C)		; lookatthislevel
+	.byte .hibyte($000065)		; hungrymanadventures
 	.byte .hibyte($0000A2)		; groundtospace
 	.byte .hibyte($0000F3)		; ajollyretrochristmas
 	.byte .hibyte($00006C)		; ultiatedestruction
@@ -777,6 +782,7 @@ _level_lengths_hi:
 	.byte .bankbyte($000090)		; dorabaebasic6
 	.byte .bankbyte($0000AC)		; dreamer
 	.byte .bankbyte($00005C)		; lookatthislevel
+	.byte .bankbyte($000065)		; hungrymanadventures
 	.byte .bankbyte($0000A2)		; groundtospace
 	.byte .bankbyte($0000F3)		; ajollyretrochristmas
 	.byte .bankbyte($00006C)		; ultiatedestruction

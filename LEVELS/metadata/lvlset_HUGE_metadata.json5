@@ -2037,6 +2037,51 @@
 			],
 		},
 		{
+			level: "hungrymanadventures",
+			upperText: "HUNGRYMAN",
+			lowerText: "ADVENTURES",
+			decoType: "DECOCLOUD",
+			spikeSet: "A",
+			blockSet: "B",
+			sawSet: "A",
+			difficulty: "HARD",
+			stars: 4,
+			songID: "song_hungryman_adventures",
+			startingGameMode: 0,
+			startingSpeed: 0,
+			startingBackgroundColor: 0x02,
+			startingGroundColor: 0x01,
+			maxFallSpeed: 0x07,
+			objectOffsets: [
+				{
+					coordinates: [
+						[145, 21], [263, 21], [338, 18], [345, 18], [353, 18], [362, 17], [451, 17],
+					],
+					offsetY: -8
+				},
+				{
+					coordinates: [
+						[145, 20], [263, 20], [267, 18], [272, 18], [280, 18], [283, 18], [281, 24], [289, 20], [293, 17], [298, 15], [305, 14], [312, 14], [318, 14], [329, 14],
+						[331, 15], [333, 16], [553, 19], [589, 14], [593, 14], [422, 14], [95, 21],
+					],
+					offsetY: +8
+				},
+				{
+					coordinates: [
+						[393, 16], [335, 16], [361, 17], [567, 16],
+					],
+					offsetX: +16
+				},
+				{
+					coordinates: [
+						[510, 16], [510, 18], [514, 16], [514, 18], [543, 15], [547, 15], [553, 19], [561, 15], [588, 11], [593, 11], [595, 12], [597, 13],
+						[600, 13], [603, 13], [606, 13], [609, 13], [612, 13], [586, 19], [451, 17], [512, 19], [508, 19], [516, 19], [545, 17],
+					],
+					offsetX: +8
+				},
+			]
+		},
+		{
 			level: "groundtospace",
 			upperText: "GROUND TO",
 			lowerText: "SPACE",

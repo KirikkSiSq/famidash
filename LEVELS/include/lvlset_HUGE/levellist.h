@@ -38,6 +38,7 @@ const uint8_t difficulty_list[] = {
 	NORMAL,	// dorabaebasic6
 	HARD,	// dreamer
 	HARD,	// lookatthislevel
+	HARD,	// hungrymanadventures
 	HARD,	// groundtospace
 	HARD,	// ajollyretrochristmas
 	HARD,	// ultiatedestruction
@@ -168,6 +169,7 @@ const uint8_t stars_list[] = {
 	3,	// dorabaebasic6
 	4,	// dreamer
 	4,	// lookatthislevel
+	4,	// hungrymanadventures
 	5,	// groundtospace
 	5,	// ajollyretrochristmas
 	5,	// ultiatedestruction
