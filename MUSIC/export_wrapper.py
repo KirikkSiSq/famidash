@@ -239,7 +239,7 @@ if __name__ == "__main__":
 			if verbose:
 				print(f"Creating temporary folder TMP/{foldername}")
 			outFolder = tmpFolder / foldername
-			outFolder.mkdir(parents = True, exist_ok = False)
+			outFolder.mkdir()
 		else:
 			outFolder = outputFolder(levelSet)
 
