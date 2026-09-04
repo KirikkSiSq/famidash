@@ -136,7 +136,7 @@
 	.align 8192
 
 
-; Data bank 09, total bank size: 7974 bytes
+; Data bank 09, total bank size: 7984 bytes
 	.export level_data_chaozimpact
 	level_data_chaozimpact:
 	; Header
@@ -156,8 +156,8 @@
 	; Level data
 		.incbin "EXPORTS/level/chaozimpact.lz.bin" ; Size: 7245
 
-	sprite_data_movie:	; Size: 716
-		.incbin "EXPORTS/sprite/movie.bin"
+	sprite_data_trolledfix:	; Size: 726
+		.incbin "EXPORTS/sprite/trolledfix.bin"
 	.align 8192
 
 
@@ -320,7 +320,7 @@
 	.align 8192
 
 
-; Data bank 0F, total bank size: 8153 bytes
+; Data bank 0F, total bank size: 7941 bytes
 	.export level_data_solarcircles
 	level_data_solarcircles:
 	; Header
@@ -357,26 +357,7 @@
 		.byte $0F ;________________________________ Starting ground color
 		.byte 32 ;_________________________________ Level height
 	; Level data
-		.incbin "EXPORTS/level/movie.lz.bin" ; Size: 1428
-
-	.export level_data_doubletripletrial
-	level_data_doubletripletrial:
-	; Header
-		.byte <sprite_data_doubletripletrial ;_________________ Sprite data ptr, low byte
-		.byte >(sprite_data_doubletripletrial) & $1F | $A0 ;___ Sprite data ptr, high byte
-		.byte <(sprite_data_doubletripletrial >> 13) ;_________ Sprite data bank
-		.byte song_dastardly ;_________________________________ Song ID
-		.byte (4 << 4) | 0 ;___________________________________ Starting game mode and speed
-		.byte ($B0) ;__________________________________________ Spawn Y Position (high byte)
-		.byte ($CF) ;__________________________________________ Y Scroll Position (low byte)
-		.byte (0 << 0) | (0 << 1) ;____________________________ Force platformer, Disable parallax
-		.byte (1 << 7) | _DECO1 ;______________________________ Max Fall Speed is 7?, Deco type
-		.byte (_SPIKESA << 4) | _BLOCKSB ;_____________________ Spike Set, Block Set
-		.byte $00 ;____________________________________________ Starting background color
-		.byte $00 ;____________________________________________ Starting ground color
-		.byte 27 ;_____________________________________________ Level height
-	; Level data
-		.incbin "EXPORTS/level/doubletripletrial.lz.bin" ; Size: 251
+		.incbin "EXPORTS/level/movie.lz.bin" ; Size: 1480
 
 	.align 8192
 
@@ -768,7 +749,7 @@
 	.align 8192
 
 
-; Data bank 1F, total bank size: 8122 bytes
+; Data bank 1F, total bank size: 8157 bytes
 	.export level_data_illusion
 	level_data_illusion:
 	; Header
@@ -790,8 +771,8 @@
 
 	sprite_data_cosmicdolphin:	; Size: 3646
 		.incbin "EXPORTS/sprite/cosmicdolphin.bin"
-	sprite_data_trolledfix:	; Size: 726
-		.incbin "EXPORTS/sprite/trolledfix.bin"
+	sprite_data_movie:	; Size: 761
+		.incbin "EXPORTS/sprite/movie.bin"
 	.align 8192
 
 
@@ -849,13 +830,32 @@
 	.align 8192
 
 
-; Data bank 22, total bank size: 7523 bytes
+; Data bank 22, total bank size: 7787 bytes
 	sprite_data_solarcircles:	; Size: 2911
 		.incbin "EXPORTS/sprite/solarcircles.bin"
 	sprite_data_dreamer:	; Size: 2791
 		.incbin "EXPORTS/sprite/dreamer.bin"
 	sprite_data_outerspace:	; Size: 1821
 		.incbin "EXPORTS/sprite/outerspace.bin"
+	.export level_data_doubletripletrial
+	level_data_doubletripletrial:
+	; Header
+		.byte <sprite_data_doubletripletrial ;_________________ Sprite data ptr, low byte
+		.byte >(sprite_data_doubletripletrial) & $1F | $A0 ;___ Sprite data ptr, high byte
+		.byte <(sprite_data_doubletripletrial >> 13) ;_________ Sprite data bank
+		.byte song_dastardly ;_________________________________ Song ID
+		.byte (4 << 4) | 0 ;___________________________________ Starting game mode and speed
+		.byte ($B0) ;__________________________________________ Spawn Y Position (high byte)
+		.byte ($CF) ;__________________________________________ Y Scroll Position (low byte)
+		.byte (0 << 0) | (0 << 1) ;____________________________ Force platformer, Disable parallax
+		.byte (1 << 7) | _DECO1 ;______________________________ Max Fall Speed is 7?, Deco type
+		.byte (_SPIKESA << 4) | _BLOCKSB ;_____________________ Spike Set, Block Set
+		.byte $00 ;____________________________________________ Starting background color
+		.byte $00 ;____________________________________________ Starting ground color
+		.byte 27 ;_____________________________________________ Level height
+	; Level data
+		.incbin "EXPORTS/level/doubletripletrial.lz.bin" ; Size: 251
+
 	.align 8192
 
 
