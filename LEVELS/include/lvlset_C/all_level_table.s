@@ -146,7 +146,7 @@ _level_chunk_list_bank:
 .define HIGH_LEVEL_LENGTHS_ENABLED 0
 
 _level_lengths_lo:
-	.byte .lobyte($0000BB)		; movie
+	.byte .lobyte($0000B8)		; movie
 	.byte .lobyte($000066)		; groundtoretray
 	.byte .lobyte($00008B)		; madness
 	.byte .lobyte($000080)		; feather
@@ -185,7 +185,7 @@ _level_lengths_lo:
 .if MID_LEVEL_LENGTHS_ENABLED
 
 _level_lengths_md:
-	.byte .hibyte($0000BB)		; movie
+	.byte .hibyte($0000B8)		; movie
 	.byte .hibyte($000066)		; groundtoretray
 	.byte .hibyte($00008B)		; madness
 	.byte .hibyte($000080)		; feather
@@ -224,7 +224,7 @@ _level_lengths_md:
 .if HIGH_LEVEL_LENGTHS_ENABLED
 
 _level_lengths_hi:
-	.byte .bankbyte($0000BB)		; movie
+	.byte .bankbyte($0000B8)		; movie
 	.byte .bankbyte($000066)		; groundtoretray
 	.byte .bankbyte($00008B)		; madness
 	.byte .bankbyte($000080)		; feather

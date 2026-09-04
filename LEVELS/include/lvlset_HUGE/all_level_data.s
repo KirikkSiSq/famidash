@@ -969,7 +969,7 @@
 	.align 8192
 
 
-; Data bank 2E, total bank size: 8165 bytes
+; Data bank 2E, total bank size: 8120 bytes
 	.export level_data_kratos
 	level_data_kratos:
 	; Header
@@ -989,7 +989,7 @@
 	; Level data
 		.incbin "EXPORTS/level/kratos.lz.bin" ; Size: 7391
 
-	sprite_data_movie:	; Size: 761
+	sprite_data_movie:	; Size: 716
 		.incbin "EXPORTS/sprite/movie.bin"
 	.align 8192
 
@@ -3585,7 +3585,7 @@
 	.align 8192
 
 
-; Data bank 93, total bank size: 8129 bytes
+; Data bank 93, total bank size: 8144 bytes
 	.export level_data_wintherace
 	level_data_wintherace:
 	; Header
@@ -3624,8 +3624,8 @@
 	; Level data
 		.incbin "EXPORTS/level/groundtoretray.lz.bin" ; Size: 3196
 
-	sprite_data_explorers:	; Size: 1411
-		.incbin "EXPORTS/sprite/explorers.bin"
+	sprite_data_subtleoddities:	; Size: 1426
+		.incbin "EXPORTS/sprite/subtleoddities.bin"
 	.align 8192
 
 
@@ -3972,15 +3972,32 @@
 	.align 8192
 
 
-; Data bank A0, total bank size: 8164 bytes
+; Data bank A0, total bank size: 8179 bytes
 	sprite_data_moonlight:	; Size: 2251
 		.incbin "EXPORTS/sprite/moonlight.bin"
 	sprite_data_nightmare:	; Size: 2246
 		.incbin "EXPORTS/sprite/nightmare.bin"
 	sprite_data_thesteamworks:	; Size: 2241
 		.incbin "EXPORTS/sprite/thesteamworks.bin"
-	sprite_data_subtleoddities:	; Size: 1426
-		.incbin "EXPORTS/sprite/subtleoddities.bin"
+	.export level_data_movie
+	level_data_movie:
+	; Header
+		.byte <sprite_data_movie ;_________________ Sprite data ptr, low byte
+		.byte >(sprite_data_movie) & $1F | $A0 ;___ Sprite data ptr, high byte
+		.byte <(sprite_data_movie >> 13) ;_________ Sprite data bank
+		.byte song_stereo_madness ;________________ Song ID
+		.byte (0 << 4) | 0 ;_______________________ Starting game mode and speed
+		.byte ($B0) ;______________________________ Spawn Y Position (high byte)
+		.byte ($CF) ;______________________________ Y Scroll Position (low byte)
+		.byte (0 << 0) | (0 << 1) ;________________ Force platformer, Disable parallax
+		.byte (1 << 7) | _DECO1 ;__________________ Max Fall Speed is 7?, Deco type
+		.byte (_SPIKESA << 4) | _BLOCKSA ;_________ Spike Set, Block Set
+		.byte $0F ;________________________________ Starting background color
+		.byte $0F ;________________________________ Starting ground color
+		.byte 32 ;_________________________________ Level height
+	; Level data
+		.incbin "EXPORTS/level/movie.lz.bin" ; Size: 1428
+
 	.align 8192
 
 
@@ -4138,7 +4155,7 @@
 	.align 8192
 
 
-; Data bank A6, total bank size: 7529 bytes
+; Data bank A6, total bank size: 8173 bytes
 	.export level_data_dryout
 	level_data_dryout:
 	; Header
@@ -4182,27 +4199,12 @@
 	; Level data
 		.incbin "EXPORTS/level/demoncryogenic.lz.1.bin" ; Size: 1495
 
-	.export level_data_movie
-	level_data_movie:
-	; Header
-		.byte <sprite_data_movie ;_________________ Sprite data ptr, low byte
-		.byte >(sprite_data_movie) & $1F | $A0 ;___ Sprite data ptr, high byte
-		.byte <(sprite_data_movie >> 13) ;_________ Sprite data bank
-		.byte song_stereo_madness ;________________ Song ID
-		.byte (0 << 4) | 0 ;_______________________ Starting game mode and speed
-		.byte ($B0) ;______________________________ Spawn Y Position (high byte)
-		.byte ($CF) ;______________________________ Y Scroll Position (low byte)
-		.byte (0 << 0) | (0 << 1) ;________________ Force platformer, Disable parallax
-		.byte (1 << 7) | _DECO1 ;__________________ Max Fall Speed is 7?, Deco type
-		.byte (_SPIKESA << 4) | _BLOCKSA ;_________ Spike Set, Block Set
-		.byte $0F ;________________________________ Starting background color
-		.byte $0F ;________________________________ Starting ground color
-		.byte 32 ;_________________________________ Level height
-	; Level data
-		.incbin "EXPORTS/level/movie.lz.bin" ; Size: 1480
-
 	sprite_data_fingerdash:	; Size: 1491
 		.incbin "EXPORTS/sprite/fingerdash.bin"
+	sprite_data_explorers:	; Size: 1411
+		.incbin "EXPORTS/sprite/explorers.bin"
+	sprite_data_trolledfix:	; Size: 726
+		.incbin "EXPORTS/sprite/trolledfix.bin"
 	.align 8192
 
 
@@ -4367,7 +4369,7 @@
 	.align 8192
 
 
-; Data bank AB, total bank size: 6631 bytes
+; Data bank AB, total bank size: 5905 bytes
 	sprite_data_denouement:	; Size: 956
 		.incbin "EXPORTS/sprite/denouement.bin"
 	.export level_data_thesewers
@@ -4395,8 +4397,6 @@
 		.incbin "EXPORTS/sprite/retray.bin"
 	sprite_data_cantletgo:	; Size: 856
 		.incbin "EXPORTS/sprite/cantletgo.bin"
-	sprite_data_trolledfix:	; Size: 726
-		.incbin "EXPORTS/sprite/trolledfix.bin"
 	.export level_data_luckydraw
 	level_data_luckydraw:
 	; Header

@@ -655,7 +655,7 @@ _level_lengths_lo:
 	.byte .lobyte($000052)		; thesecrethollow
 	.byte .lobyte($00002F)		; thechallenge
 	.byte .lobyte($00006F)		; bestautomaticlvl
-	.byte .lobyte($0000BB)		; movie
+	.byte .lobyte($0000B8)		; movie
 	.byte .lobyte($000066)		; retray
 	.byte .lobyte($000066)		; groundtoretray
 	.byte .lobyte($00008B)		; sonar
@@ -829,7 +829,7 @@ _level_lengths_md:
 	.byte .hibyte($000052)		; thesecrethollow
 	.byte .hibyte($00002F)		; thechallenge
 	.byte .hibyte($00006F)		; bestautomaticlvl
-	.byte .hibyte($0000BB)		; movie
+	.byte .hibyte($0000B8)		; movie
 	.byte .hibyte($000066)		; retray
 	.byte .hibyte($000066)		; groundtoretray
 	.byte .hibyte($00008B)		; sonar
@@ -1003,7 +1003,7 @@ _level_lengths_hi:
 	.byte .bankbyte($000052)		; thesecrethollow
 	.byte .bankbyte($00002F)		; thechallenge
 	.byte .bankbyte($00006F)		; bestautomaticlvl
-	.byte .bankbyte($0000BB)		; movie
+	.byte .bankbyte($0000B8)		; movie
 	.byte .bankbyte($000066)		; retray
 	.byte .bankbyte($000066)		; groundtoretray
 	.byte .bankbyte($00008B)		; sonar
